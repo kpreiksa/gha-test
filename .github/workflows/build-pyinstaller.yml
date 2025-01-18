@@ -37,10 +37,11 @@ jobs:
     - name: Build pyinstaller
       run: |
         pyinstaller --onefile test.py
-    - name: List Dir
-      run: |
-        cd dist
-        ls -a
+    - name: Upload file
+      uses: actions/upload-artifact@v4
+      with:
+        name: build-mac
+        path: dist/test*
   build-pyinstaller-linux:
     runs-on: ubuntu-latest
     steps:
@@ -56,7 +57,8 @@ jobs:
     - name: Build pyinstaller
       run: |
         pyinstaller --onefile test.py
-    - name: List Dir
-      run: |
-        cd dist
-        ls -a
+    - name: Upload file
+      uses: actions/upload-artifact@v4
+      with:
+        name: build-linux
+        path: dist/test*
