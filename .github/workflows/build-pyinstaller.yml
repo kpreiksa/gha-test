@@ -1,5 +1,5 @@
 name: Build PyInstaller
-run-name: ${{ github.actor }} is testing out GitHub Actions 🚀
+run-name: Build App for 3 platforms 🚀
 on: [workflow_dispatch]
 jobs:
   build-pyinstaller-windows:
