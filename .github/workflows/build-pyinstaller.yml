@@ -2,14 +2,18 @@ name: Build PyInstaller
 run-name: Build App for 3 platforms 🚀
 on: [workflow_dispatch]
 jobs:
-  build-pyinstaller-windows:
-    runs-on: windows-latest
+  build-pyinstaller-matrix:
+    strategy:
+      matrix:
+        os: [windows-latest, macos-latest, ubuntu-latest]
+        pyversion: [3.13, 3.12, 3.11]
+    runs-on: ${{ matrix.os }}
     steps:
     - uses: actions/checkout@v2
-    - name: Set up Python 3.12
+    - name: Set up Python ${{ matrix.pyversion }}
       uses: actions/setup-python@v3
       with:
-        python-version: 3.12
+        python-version: ${{ matrix.pyversion }}
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
@@ -20,44 +24,9 @@ jobs:
     - name: Upload file
       uses: actions/upload-artifact@v4
       with:
-        name: build-windows
-        path: dist/test.exe
-  build-pyinstaller-mac:
-    runs-on: macos-latest
-    steps:
-    - uses: actions/checkout@v2
-    - name: Set up Python 3.12
-      uses: actions/setup-python@v3
-      with:
-        python-version: 3.12
-    - name: Install dependencies
-      run: |
-        python -m pip install --upgrade pip
-        pip install pyinstaller
-    - name: Build pyinstaller
-      run: |
-        pyinstaller --onefile test.py
-    - name: Upload file
-      uses: actions/upload-artifact@v4
-      with:
-        name: build-mac
-        path: dist/test*
-  build-pyinstaller-linux:
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v2
-    - name: Set up Python 3.12
-      uses: actions/setup-python@v3
-      with:
-        python-version: 3.12
-    - name: Install dependencies
-      run: |
-        python -m pip install --upgrade pip
-        pip install pyinstaller
-    - name: Build pyinstaller
-      run: |
-        pyinstaller --onefile test.py
-    - name: Upload file
+        name: build-${{ matrix.os }}-${{ matrix.pyversion }}
+        path: dist/test.*
+
       uses: actions/upload-artifact@v4
       with:
         name: build-linux
